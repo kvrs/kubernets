@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment # Manages pods with label  "environment test" and managess replicaset defined within 
+metadata:
+  labels:
+    environment: test # replicaset initating with the name like lables 
+  name: testdeployment # deployment name
+spec:  # specifications
+  replicas: 3   # How many replicaset are required  dependons on you 
+  selector:   # selector will taking care of Lables name is correct or not and run perfect opertaion with help of lables 
+    matchLabels:  # when hit the any operations like  show replicaset information when we gives a Label name.if the correct lable and it's show in details 
+      environment: test
+  miniReadySecounds: 10 # when are upgrading  cntainers images. existing repicaset terminates one by one with time period 10 secouds
+  startegy:  #  it executes rollingupdates 1.16 to 1.17 version startegy 
+    rollingUpdate:
+      maxSurge: 1    # maxSurge manes at a time effect the changes single operation not multiple operations like upgradations
+      macUnavailable: 0  # once upgradation completd in relicaset have only 0 avaiable pods 
+    type: RollingUpdate
+  templete:   
+    metadata:
+      labels:
+        environment: test
+    spec:
+      containers:
+      - image: nginx:1.16  #  image version tag
+        name: nginx #name of container image 
+
